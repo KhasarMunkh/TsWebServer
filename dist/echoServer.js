@@ -67,7 +67,7 @@ function newConnection(socket) {
 function ServeClient(socket) {
     return __awaiter(this, void 0, void 0, function* () {
         const conn = (0, tcpconn_1.soInit)(socket);
-        const buf = { data: Buffer.alloc(0), length: 0 };
+        const buf = { data: Buffer.alloc(0), length: 0, headPtr: 0 };
         while (true) {
             const msg = (0, dynbuf_1.cutMessage)(buf);
             if (!msg) {
@@ -89,6 +89,7 @@ function ServeClient(socket) {
                 return;
             }
             else {
+                console.log('received message:', msg.toString());
                 const reply = Buffer.concat([Buffer.from('Echo: '), msg]);
                 yield (0, tcpconn_1.soWrite)(conn, reply);
             }

@@ -21,7 +21,7 @@ async function newConnection(socket: net.Socket): Promise<void> {
 // Send the response.
 async function ServeClient(socket: net.Socket): Promise<void> {
   const conn: TcpConn = soInit(socket);
-  const buf: DynBuf = { data: Buffer.alloc(0), length: 0 };
+  const buf: DynBuf = { data: Buffer.alloc(0), length: 0, headPtr: 0};
   while (true) {
     const msg: null | Buffer = cutMessage(buf);
     if (!msg) {
@@ -43,6 +43,7 @@ async function ServeClient(socket: net.Socket): Promise<void> {
       return;
     }
     else {
+      console.log('received message:', msg.toString());
       const reply = Buffer.concat([Buffer.from('Echo: '), msg]);
       await soWrite(conn, reply);
     }
